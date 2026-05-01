@@ -1,0 +1,208 @@
+import { Search, SlidersHorizontal, X } from "lucide-react";
+import { cn } from "../lib/utils";
+import type { PlaceFilters } from "../types/place";
+
+const DEFAULT_FILTERS: PlaceFilters = {
+  city: "all",
+  wifiAvailable: false,
+  plugs: "any",
+  prayerRoom: null,
+  noiseLevel: "any",
+  parking: null,
+  maxPriceRange: 4,
+  query: "",
+};
+
+interface FilterBarProps {
+  filters: PlaceFilters;
+  onChange: (f: PlaceFilters) => void;
+  totalCount: number;
+  filteredCount: number;
+}
+
+const PRICE_LABELS: Record<1 | 2 | 3 | 4, string> = {
+  1: "Rp",
+  2: "Rp Rp",
+  3: "Rp Rp Rp",
+  4: "Rp Rp Rp Rp",
+};
+
+export function FilterBar({ filters, onChange, totalCount, filteredCount }: FilterBarProps) {
+  const hasActiveFilters =
+    filters.city !== "all" ||
+    filters.wifiAvailable ||
+    filters.plugs !== "any" ||
+    filters.prayerRoom !== null ||
+    filters.noiseLevel !== "any" ||
+    filters.parking !== null ||
+    filters.maxPriceRange !== 4 ||
+    filters.query !== "";
+
+  function set<K extends keyof PlaceFilters>(key: K, value: PlaceFilters[K]) {
+    onChange({ ...filters, [key]: value });
+  }
+
+  return (
+    <div className="space-y-3">
+      {/* Search + reset row */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search cafes, areas, tags…"
+            value={filters.query}
+            onChange={(e) => set("query", e.target.value)}
+            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+          />
+        </div>
+        {hasActiveFilters && (
+          <button
+            onClick={() => onChange({ ...DEFAULT_FILTERS })}
+            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:bg-stone-50 transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+            Reset
+          </button>
+        )}
+      </div>
+
+      {/* City tabs */}
+      <div className="flex gap-1 bg-stone-100 p-1 rounded-xl w-fit">
+        {(["all", "jakarta", "yogyakarta"] as const).map((c) => (
+          <button
+            key={c}
+            onClick={() => set("city", c)}
+            className={cn(
+              "px-4 py-1.5 rounded-lg text-sm font-medium transition-colors",
+              filters.city === c
+                ? "bg-white text-stone-900 shadow-sm"
+                : "text-stone-500 hover:text-stone-700"
+            )}
+          >
+            {c === "all" ? "All" : c === "jakarta" ? "Jakarta" : "Yogyakarta"}
+          </button>
+        ))}
+      </div>
+
+      {/* Filter chips row */}
+      <div className="flex flex-wrap gap-2 items-center">
+        <SlidersHorizontal className="w-4 h-4 text-stone-400 flex-shrink-0" />
+
+        {/* WiFi */}
+        <FilterChip
+          active={filters.wifiAvailable}
+          onClick={() => set("wifiAvailable", !filters.wifiAvailable)}
+        >
+          WiFi available
+        </FilterChip>
+
+        {/* Plugs */}
+        <select
+          value={filters.plugs}
+          onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
+          className={cn(
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            filters.plugs !== "any"
+              ? "bg-amber-600 text-white border-amber-600"
+              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+          )}
+        >
+          <option value="any">Any plugs</option>
+          <option value="ample">Ample plugs</option>
+          <option value="limited">Some plugs</option>
+          <option value="none">No plugs</option>
+        </select>
+
+        {/* Noise */}
+        <select
+          value={filters.noiseLevel}
+          onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
+          className={cn(
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            filters.noiseLevel !== "any"
+              ? "bg-amber-600 text-white border-amber-600"
+              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+          )}
+        >
+          <option value="any">Any noise</option>
+          <option value="quiet">Quiet</option>
+          <option value="moderate">Moderate</option>
+          <option value="loud">Loud/Lively</option>
+        </select>
+
+        {/* Prayer room */}
+        <FilterChip
+          active={filters.prayerRoom === true}
+          onClick={() => set("prayerRoom", filters.prayerRoom === true ? null : true)}
+        >
+          Prayer room
+        </FilterChip>
+
+        {/* Parking */}
+        <FilterChip
+          active={filters.parking === true}
+          onClick={() => set("parking", filters.parking === true ? null : true)}
+        >
+          Has parking
+        </FilterChip>
+
+        {/* Price */}
+        <select
+          value={filters.maxPriceRange}
+          onChange={(e) =>
+            set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])
+          }
+          className={cn(
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            filters.maxPriceRange !== 4
+              ? "bg-amber-600 text-white border-amber-600"
+              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+          )}
+        >
+          <option value={4}>Any price</option>
+          {([1, 2, 3] as const).map((v) => (
+            <option key={v} value={v}>
+              Up to {PRICE_LABELS[v]}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Result count */}
+      <p className="text-sm text-stone-500">
+        {filteredCount === totalCount ? (
+          <span>{totalCount} places</span>
+        ) : (
+          <span>
+            <span className="font-medium text-stone-800">{filteredCount}</span> of {totalCount} places
+          </span>
+        )}
+      </p>
+    </div>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={cn(
+        "px-3 py-1.5 rounded-full text-sm border font-medium transition-colors",
+        active
+          ? "bg-amber-600 text-white border-amber-600"
+          : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+      )}
+    >
+      {children}
+    </button>
+  );
+}
