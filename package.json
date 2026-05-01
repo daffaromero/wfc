@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "bun run scripts/seed-places.ts",
-    "seed:dry": "bun run scripts/seed-places.ts --dry-run"
+    "seed:dry": "bun run scripts/seed-places.ts --dry-run",
+    "analyze": "bun run scripts/analyze-reviews.ts",
+    "analyze:dry": "bun run scripts/analyze-reviews.ts --dry-run",
+    "analyze:keywords": "bun run scripts/analyze-reviews.ts --no-llm --dry-run"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -22,6 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.2.4",
+    "@types/bun": "^1.3.13",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
