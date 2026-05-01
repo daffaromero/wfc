@@ -20,5 +20,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["scripts/**/*.ts"]
+  "include": ["scripts/**/*.ts", "server/**/*.ts", "drizzle.config.ts"]
 }

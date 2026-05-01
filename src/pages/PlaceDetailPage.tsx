@@ -15,7 +15,7 @@ import {
   UtensilsCrossed,
   CalendarClock,
 } from "lucide-react";
-import { places } from "../data/places";
+import { usePlace } from "../hooks/usePlace";
 import { Badge } from "../components/Badge";
 import {
   cn,
@@ -36,9 +36,17 @@ const SEATING_LABELS: Record<string, string> = {
 
 export function PlaceDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const place = places.find((p) => p.id === id);
+  const { place, loading, error } = usePlace(id);
 
-  if (!place) {
+  if (loading) {
+    return (
+      <main className="max-w-6xl mx-auto px-4 py-20 text-center text-stone-400">
+        <p className="text-xl font-medium">Loading…</p>
+      </main>
+    );
+  }
+
+  if (error || !place) {
     return (
       <main className="max-w-6xl mx-auto px-4 py-20 text-center text-stone-500">
         <p className="text-xl font-medium">Place not found.</p>
@@ -146,7 +154,7 @@ export function PlaceDetailPage() {
       {/* Two column grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* WFC Features */}
-        <Section title="WFC Features">
+        <Section title="Cafe Details">
           <WfcRow
             icon={<Wifi className="w-4 h-4" />}
             label="WiFi"

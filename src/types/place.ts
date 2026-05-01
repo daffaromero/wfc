@@ -51,6 +51,8 @@ export interface Place {
   tags: string[];
   /** ISO date when WFC info was last verified */
   lastVerified: string;
+  /** Raw note from the curator's Google Maps list */
+  curatorNote?: string;
 }
 
 export interface PlaceFilters {
