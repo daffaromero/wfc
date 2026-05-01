@@ -8,7 +8,7 @@ export function Header() {
           <span className="text-xl font-black tracking-tight">Curated<span className="text-[var(--color-wfc-amber)]">.</span></span>
         </Link>
         <nav className="flex items-center gap-1 text-sm">
-          <Link to="/" className="px-3 py-1.5 rounded font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">Browse</Link>
+          <Link to="/browse" className="px-3 py-1.5 rounded font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">Browse</Link>
           <a
             href="https://github.com/daffaromero/wfc"
             target="_blank"

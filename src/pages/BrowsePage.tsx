@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { usePlaces } from "../hooks/usePlaces";
 import { PlaceCard } from "../components/PlaceCard";
 import { FilterBar } from "../components/FilterBar";
@@ -16,23 +17,20 @@ const DEFAULT_FILTERS: PlaceFilters = {
 };
 
 export function BrowsePage() {
-  const [filters, setFilters] = useState<PlaceFilters>(DEFAULT_FILTERS);
+  const [searchParams] = useSearchParams();
+  const paramCity = searchParams.get("city") ?? "all";
+  const initialCity = (["all", "jakarta", "yogyakarta"] as string[]).includes(paramCity)
+    ? (paramCity as PlaceFilters["city"])
+    : "all";
+
+  const [filters, setFilters] = useState<PlaceFilters>({
+    ...DEFAULT_FILTERS,
+    city: initialCity,
+  });
   const { places, loading, error } = usePlaces(filters);
 
   return (
-    <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-      {/* Hero */}
-      <div className="space-y-2">
-        <h1 className="text-4xl sm:text-5xl font-black text-foreground tracking-tight">
-          Curated<span className="text-[var(--color-wfc-amber)]">.</span>
-        </h1>
-        <p className="text-muted-foreground text-base sm:text-lg max-w-xl">
-          The best cafes to work from in Jakarta and Yogyakarta —
-          vetted for WiFi, plugs, noise level, prayer rooms, and more.
-        </p>
-      </div>
-
-      {/* Filters */}
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
       <FilterBar
         filters={filters}
         onChange={setFilters}

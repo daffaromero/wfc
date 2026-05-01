@@ -34,9 +34,9 @@ export function cityLabel(city: string): string {
 
 export function noiseLevelVariant(level: "quiet" | "moderate" | "loud"): string {
   return {
-    quiet:    "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
-    moderate: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
-    loud:     "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
+    quiet:    "bg-[var(--color-wfc-green)] text-white",
+    moderate: "bg-[var(--color-wfc-amber)] text-white",
+    loud:     "bg-[var(--color-wfc-red)] text-white",
   }[level];
 }
 
@@ -46,11 +46,11 @@ export function noiseLevelColor(level: "quiet" | "moderate" | "loud"): string {
 }
 
 export function wifiSpeedVariant(speed?: "slow" | "moderate" | "fast"): string {
-  if (!speed) return "bg-secondary text-muted-foreground";
+  if (!speed) return "bg-muted text-muted-foreground";
   return {
-    slow:     "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
-    moderate: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
-    fast:     "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
+    slow:     "bg-[var(--color-wfc-red)] text-white",
+    moderate: "bg-[var(--color-wfc-amber)] text-white",
+    fast:     "bg-[var(--color-wfc-green)] text-white",
   }[speed];
 }
 
@@ -61,9 +61,9 @@ export function wifiSpeedColor(speed?: "slow" | "moderate" | "fast"): string {
 
 export function plugsVariant(plugs: "none" | "limited" | "ample"): string {
   return {
-    ample:   "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
-    limited: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
-    none:    "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
+    ample:   "bg-[var(--color-wfc-green)] text-white",
+    limited: "bg-[var(--color-wfc-amber)] text-white",
+    none:    "bg-[var(--color-wfc-red)] text-white",
   }[plugs];
 }
 

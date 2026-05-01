@@ -39,8 +39,15 @@ export function PlaceCard({ place }: PlaceCardProps) {
               No photo
             </div>
           )}
-          {/* City pill */}
-          <span className="absolute top-3 left-3 bg-white/95 text-foreground text-xs font-semibold px-2 py-0.5 rounded">
+          {/* City pill — colored by city */}
+          <span
+            className={cn(
+              "absolute top-3 left-3 text-white text-xs font-bold px-2 py-0.5 rounded",
+              place.city === "jakarta"
+                ? "bg-[var(--color-wfc-blue)]"
+                : "bg-[var(--color-wfc-green)]"
+            )}
+          >
             {cityLabel(place.city)}
           </span>
           {/* Price range */}
