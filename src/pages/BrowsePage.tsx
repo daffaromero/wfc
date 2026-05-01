@@ -39,9 +39,9 @@ export function BrowsePage() {
 
   return (
     <div>
-      {/* City identity band — landing-page energy */}
+      {/* City identity band — seamless continuation of the dark header */}
       <div className="bg-foreground">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-8 sm:pb-10">
           <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-3">
             Work-friendly cafes · Indonesia
           </p>
