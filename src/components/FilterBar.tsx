@@ -1,5 +1,6 @@
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 import type { PlaceFilters } from "../types/place";
 
 const DEFAULT_FILTERS: PlaceFilters = {
@@ -47,13 +48,13 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       {/* Search + reset row */}
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 pointer-events-none" />
-          <input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+          <Input
             type="text"
             placeholder="Search cafes, areas, tags…"
             value={filters.query}
             onChange={(e) => set("query", e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+            className="pl-9 rounded-xl"
           />
         </div>
         {hasActiveFilters && (
@@ -87,7 +88,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
 
       {/* Filter chips row */}
       <div className="flex flex-wrap gap-2 items-center">
-        <SlidersHorizontal className="w-4 h-4 text-stone-400 flex-shrink-0" />
+        <SlidersHorizontal className="w-4 h-4 text-muted-foreground flex-shrink-0" />
 
         {/* WiFi */}
         <FilterChip
@@ -102,9 +103,9 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.plugs}
           onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
             filters.plugs !== "any"
-              ? "bg-amber-600 text-white border-amber-600"
+              ? "bg-foreground text-background border-foreground"
               : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
           )}
         >
@@ -119,9 +120,9 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.noiseLevel}
           onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
             filters.noiseLevel !== "any"
-              ? "bg-amber-600 text-white border-amber-600"
+              ? "bg-foreground text-background border-foreground"
               : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
           )}
         >
@@ -154,9 +155,9 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])
           }
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400",
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
             filters.maxPriceRange !== 4
-              ? "bg-amber-600 text-white border-amber-600"
+              ? "bg-foreground text-background border-foreground"
               : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
           )}
         >
@@ -170,12 +171,12 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       </div>
 
       {/* Result count */}
-      <p className="text-sm text-stone-500">
+      <p className="text-sm text-muted-foreground">
         {filteredCount === totalCount ? (
           <span>{totalCount} places</span>
         ) : (
           <span>
-            <span className="font-medium text-stone-800">{filteredCount}</span> of {totalCount} places
+            <span className="font-medium text-foreground">{filteredCount}</span> of {totalCount} places
           </span>
         )}
       </p>
@@ -198,7 +199,7 @@ function FilterChip({
       className={cn(
         "px-3 py-1.5 rounded-full text-sm border font-medium transition-colors",
         active
-          ? "bg-amber-600 text-white border-amber-600"
+          ? "bg-foreground text-background border-foreground"
           : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
       )}
     >

@@ -3,11 +3,11 @@ import { Header } from "../components/Header";
 
 export function RootLayout() {
   return (
-    <div className="min-h-svh bg-stone-50">
+    <div className="min-h-svh bg-background">
       <Header />
       <Outlet />
-      <footer className="mt-16 border-t border-stone-200 py-6 text-center text-sm text-stone-400">
-        Curated. · Jakarta &amp; Yogyakarta · Built with ☕
+      <footer className="mt-16 border-t border-border py-6 text-center text-sm text-muted-foreground">
+        Curated. · Jakarta &amp; Yogyakarta · Built with ☕️
       </footer>
     </div>
   );

@@ -1,9 +1,9 @@
-import { clsx, type ClassValue } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 import type { Place, PlaceFilters } from "../types/place";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
 export function priceRangeLabel(range: 1 | 2 | 3 | 4): string {
@@ -21,26 +21,53 @@ export function priceRangeText(range: 1 | 2 | 3 | 4): string {
 }
 
 export function wifiSpeedLabel(speed?: "slow" | "moderate" | "fast"): string {
-  if (!speed) return "Unknown";
-  return { slow: "Slow", moderate: "Moderate", fast: "Fast" }[speed];
+  if (!speed) return "WiFi";
+  return { slow: "Slow WiFi", moderate: "OK WiFi", fast: "Fast WiFi" }[speed];
 }
 
-export function noiseLevelColor(level: "quiet" | "moderate" | "loud"): string {
+export function cityLabel(city: string): string {
+  return city === "jakarta" ? "Jakarta" : "Yogyakarta";
+}
+
+// ─── Semantic badge variants ──────────────────────────────────────────────
+// Returns className strings that map to our WFC semantic palette in index.css
+
+export function noiseLevelVariant(level: "quiet" | "moderate" | "loud"): string {
   return {
-    quiet: "bg-emerald-100 text-emerald-800",
-    moderate: "bg-amber-100 text-amber-800",
-    loud: "bg-red-100 text-red-800",
+    quiet:    "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
+    moderate: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
+    loud:     "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
   }[level];
 }
 
-export function wifiSpeedColor(speed?: "slow" | "moderate" | "fast"): string {
-  if (!speed) return "bg-stone-100 text-stone-600";
+/** @deprecated use noiseLevelVariant */
+export function noiseLevelColor(level: "quiet" | "moderate" | "loud"): string {
+  return noiseLevelVariant(level);
+}
+
+export function wifiSpeedVariant(speed?: "slow" | "moderate" | "fast"): string {
+  if (!speed) return "bg-secondary text-muted-foreground";
   return {
-    slow: "bg-red-100 text-red-700",
-    moderate: "bg-amber-100 text-amber-800",
-    fast: "bg-emerald-100 text-emerald-800",
+    slow:     "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
+    moderate: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
+    fast:     "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
   }[speed];
 }
+
+/** @deprecated use wifiSpeedVariant */
+export function wifiSpeedColor(speed?: "slow" | "moderate" | "fast"): string {
+  return wifiSpeedVariant(speed);
+}
+
+export function plugsVariant(plugs: "none" | "limited" | "ample"): string {
+  return {
+    ample:   "bg-[var(--color-wfc-green-bg)] text-[var(--color-wfc-green)]",
+    limited: "bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)]",
+    none:    "bg-[var(--color-wfc-red-bg)] text-[var(--color-wfc-red)]",
+  }[plugs];
+}
+
+// ─── Filter logic (still used by API query builder) ──────────────────────
 
 export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
   return places.filter((p) => {
@@ -48,19 +75,13 @@ export function filterPlaces(places: Place[], filters: PlaceFilters): Place[] {
     if (filters.wifiAvailable && !p.wfc.wifi.available) return false;
     if (filters.plugs !== "any" && p.wfc.plugs !== filters.plugs) return false;
     if (filters.prayerRoom === true && !p.wfc.prayerRoom) return false;
-    if (filters.noiseLevel !== "any" && p.wfc.noiseLevel !== filters.noiseLevel)
-      return false;
+    if (filters.noiseLevel !== "any" && p.wfc.noiseLevel !== filters.noiseLevel) return false;
     if (filters.parking === true && p.wfc.parking === "none") return false;
     if (p.wfc.menu.priceRange > filters.maxPriceRange) return false;
     if (filters.query) {
       const q = filters.query.toLowerCase();
-      const haystack = [p.name, p.area, p.address, ...p.tags].join(" ").toLowerCase();
-      if (!haystack.includes(q)) return false;
+      if (!p.name.toLowerCase().includes(q) && !p.area.toLowerCase().includes(q)) return false;
     }
     return true;
   });
-}
-
-export function cityLabel(city: Place["city"]): string {
-  return city === "jakarta" ? "Jakarta" : "Yogyakarta";
 }
