@@ -60,9 +60,11 @@ export function BrowsePage() {
           </div>
         </div>
       </div>
+      {/* Gradient seam: dark band → white content */}
+      <div className="h-10 bg-gradient-to-b from-foreground to-background" />
 
       {/* Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-6 space-y-6">
         <FilterBar
           filters={filters}
           onChange={setFilters}
