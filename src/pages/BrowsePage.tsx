@@ -23,10 +23,10 @@ export function BrowsePage() {
     <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Hero */}
       <div className="space-y-2">
-        <h1 className="text-3xl sm:text-4xl font-bold text-stone-900 tracking-tight">
-          Curated<span className="text-amber-600">.</span>
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight">
+          Curated<span className="text-[var(--color-wfc-amber)]">.</span>
         </h1>
-        <p className="text-stone-500 text-base sm:text-lg max-w-xl">
+        <p className="text-muted-foreground text-base sm:text-lg max-w-xl">
           The best cafes to work from in Jakarta and Yogyakarta —
           vetted for WiFi, plugs, noise level, prayer rooms, and more.
         </p>
@@ -42,7 +42,7 @@ export function BrowsePage() {
 
       {/* Grid */}
       {loading ? (
-        <div className="text-center py-20 text-stone-400">
+        <div className="text-center py-20 text-muted-foreground">
           <p className="text-lg font-medium">Loading cafes…</p>
         </div>
       ) : error ? (
@@ -51,9 +51,9 @@ export function BrowsePage() {
           <p className="text-sm mt-1">{error}</p>
         </div>
       ) : places.length === 0 ? (
-        <div className="text-center py-20 text-stone-400">
+        <div className="text-center py-20 text-muted-foreground">
           <p className="text-lg font-medium">No cafes match your filters.</p>
-          <p className="text-sm mt-1">Try loosening the criteria.</p>
+          <p className="text-sm mt-1 text-muted-foreground">Try loosening the criteria.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

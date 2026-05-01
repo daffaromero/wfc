@@ -15,16 +15,17 @@ import {
   UtensilsCrossed,
   CalendarClock,
 } from "lucide-react";
-import { usePlace } from "../hooks/usePlace";
-import { Badge } from "../components/Badge";
+import { usePlace } from "@/hooks/usePlace";
+import { Badge } from "@/components/ui/badge";
 import {
   cn,
-  noiseLevelColor,
-  wifiSpeedColor,
+  noiseLevelVariant,
+  wifiSpeedVariant,
+  plugsVariant,
   wifiSpeedLabel,
   cityLabel,
   priceRangeText,
-} from "../lib/utils";
+} from "@/lib/utils";
 
 const SEATING_LABELS: Record<string, string> = {
   solo: "Solo desks",
@@ -40,7 +41,7 @@ export function PlaceDetailPage() {
 
   if (loading) {
     return (
-      <main className="max-w-6xl mx-auto px-4 py-20 text-center text-stone-400">
+      <main className="max-w-6xl mx-auto px-4 py-20 text-center text-muted-foreground">
         <p className="text-xl font-medium">Loading…</p>
       </main>
     );
@@ -48,9 +49,9 @@ export function PlaceDetailPage() {
 
   if (error || !place) {
     return (
-      <main className="max-w-6xl mx-auto px-4 py-20 text-center text-stone-500">
+      <main className="max-w-6xl mx-auto px-4 py-20 text-center text-muted-foreground">
         <p className="text-xl font-medium">Place not found.</p>
-        <Link to="/" className="mt-4 inline-block text-amber-600 hover:underline">
+        <Link to="/" className="mt-4 inline-block text-[var(--color-wfc-amber)] hover:underline">
           ← Back to directory
         </Link>
       </main>
@@ -64,7 +65,7 @@ export function PlaceDetailPage() {
       {/* Back */}
       <Link
         to="/"
-        className="inline-flex items-center gap-1.5 text-sm text-stone-500 hover:text-stone-900 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to directory
@@ -77,22 +78,22 @@ export function PlaceDetailPage() {
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-[var(--color-wfc-amber)] bg-[var(--color-wfc-amber-bg)] border border-[var(--color-wfc-amber)]/30 px-2 py-0.5 rounded-full">
               {cityLabel(place.city)}
             </span>
             {place.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="text-xs text-stone-500 bg-stone-100 px-2 py-0.5 rounded-full"
+                className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
             {place.name}
           </h1>
-          <p className="text-stone-500 flex items-center gap-1.5">
+          <p className="text-muted-foreground flex items-center gap-1.5">
             <MapPin className="w-4 h-4 flex-shrink-0" />
             {place.address}
           </p>
@@ -100,17 +101,17 @@ export function PlaceDetailPage() {
 
         {/* Rating */}
         {place.googleRating && (
-          <div className="flex-shrink-0 flex flex-col items-center bg-white border border-stone-200 rounded-2xl px-5 py-3 gap-0.5">
+          <div className="flex-shrink-0 flex flex-col items-center bg-background border border-border rounded-2xl px-5 py-3 gap-0.5">
             <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="text-2xl font-bold text-stone-900">
+              <Star className="w-4 h-4 fill-[var(--color-wfc-amber)] text-[var(--color-wfc-amber)]" />
+              <span className="text-2xl font-bold text-foreground">
                 {place.googleRating.toFixed(1)}
               </span>
             </div>
-            <span className="text-xs text-stone-400">
+            <span className="text-xs text-muted-foreground">
               {place.totalRatings?.toLocaleString()} reviews
             </span>
-            <span className="text-xs text-stone-400">Google Maps</span>
+            <span className="text-xs text-muted-foreground">Google Maps</span>
           </div>
         )}
       </div>
@@ -121,7 +122,7 @@ export function PlaceDetailPage() {
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name + " " + place.address)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-sm text-stone-600 bg-white border border-stone-200 px-3 py-1.5 rounded-lg hover:border-stone-300 transition-colors"
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground bg-background border border-border px-3 py-1.5 rounded-lg hover:border-foreground/30 transition-colors"
         >
           <MapPin className="w-3.5 h-3.5" />
           Open in Google Maps
@@ -132,7 +133,7 @@ export function PlaceDetailPage() {
             href={place.website}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-stone-600 bg-white border border-stone-200 px-3 py-1.5 rounded-lg hover:border-stone-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground bg-background border border-border px-3 py-1.5 rounded-lg hover:border-foreground/30 transition-colors"
           >
             Website
             <ExternalLink className="w-3 h-3 opacity-50" />
@@ -143,7 +144,7 @@ export function PlaceDetailPage() {
             href={`https://instagram.com/${place.instagram.replace("@", "")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-stone-600 bg-white border border-stone-200 px-3 py-1.5 rounded-lg hover:border-stone-300 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground bg-background border border-border px-3 py-1.5 rounded-lg hover:border-foreground/30 transition-colors"
           >
             <span className="text-xs">📸</span>
             {place.instagram}
@@ -160,12 +161,17 @@ export function PlaceDetailPage() {
             label="WiFi"
             value={
               wfc.wifi.available ? (
-                <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium", wifiSpeedColor(wfc.wifi.speed))}>
+                <span
+                  className={cn(
+                    "px-2 py-0.5 rounded-full text-xs font-medium",
+                    wifiSpeedVariant(wfc.wifi.speed)
+                  )}
+                >
                   {wifiSpeedLabel(wfc.wifi.speed)}
                   {wfc.wifi.requiresPassword ? " (password)" : " (open)"}
                 </span>
               ) : (
-                <span className="text-stone-400 flex items-center gap-1">
+                <span className="text-muted-foreground flex items-center gap-1 text-sm">
                   <WifiOff className="w-3.5 h-3.5" /> Not available
                 </span>
               )
@@ -178,11 +184,7 @@ export function PlaceDetailPage() {
               <span
                 className={cn(
                   "px-2 py-0.5 rounded-full text-xs font-medium",
-                  wfc.plugs === "ample"
-                    ? "bg-emerald-100 text-emerald-800"
-                    : wfc.plugs === "limited"
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-stone-100 text-stone-500"
+                  plugsVariant(wfc.plugs)
                 )}
               >
                 {wfc.plugs.charAt(0).toUpperCase() + wfc.plugs.slice(1)}
@@ -199,7 +201,7 @@ export function PlaceDetailPage() {
             }
             label="Noise level"
             value={
-              <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium", noiseLevelColor(wfc.noiseLevel))}>
+              <span className={cn("px-2 py-0.5 rounded-full text-xs font-medium", noiseLevelVariant(wfc.noiseLevel))}>
                 {wfc.noiseLevel.charAt(0).toUpperCase() + wfc.noiseLevel.slice(1)}
               </span>
             }
@@ -208,7 +210,7 @@ export function PlaceDetailPage() {
             icon={<span className="text-base">🕌</span>}
             label="Prayer room"
             value={
-              <span className={cn("text-sm font-medium", wfc.prayerRoom ? "text-teal-700" : "text-stone-400")}>
+              <span className={cn("text-sm font-medium", wfc.prayerRoom ? "text-[var(--color-wfc-teal)]" : "text-muted-foreground")}>
                 {wfc.prayerRoom ? "Available" : "Not available"}
               </span>
             }
@@ -219,9 +221,16 @@ export function PlaceDetailPage() {
             value={
               <span className="text-sm capitalize">
                 {wfc.parking === "none" ? (
-                  <span className="text-stone-400">Not available</span>
+                  <span className="text-muted-foreground">Not available</span>
                 ) : (
-                  <span className={wfc.parking === "free" ? "text-emerald-700 font-medium" : "text-amber-700 font-medium"}>
+                  <span
+                    className={cn(
+                      "font-medium",
+                      wfc.parking === "free"
+                        ? "text-[var(--color-wfc-green)]"
+                        : "text-[var(--color-wfc-amber)]"
+                    )}
+                  >
                     {wfc.parking === "free" ? "Free" : "Paid"}
                   </span>
                 )}
@@ -233,7 +242,7 @@ export function PlaceDetailPage() {
               icon={<CalendarClock className="w-4 h-4" />}
               label="Time limit"
               value={
-                <span className="text-sm text-amber-700 font-medium">
+                <span className="text-sm text-[var(--color-wfc-amber)] font-medium">
                   {wfc.seating.timeLimitHours}h max stay
                 </span>
               }
@@ -246,18 +255,18 @@ export function PlaceDetailPage() {
           <div className="space-y-2">
             <div className="flex flex-wrap gap-1.5">
               {wfc.seating.types.map((t) => (
-                <Badge key={t} className="bg-stone-100 text-stone-700">
+                <Badge key={t} className="bg-muted text-foreground">
                   {SEATING_LABELS[t] ?? t}
                 </Badge>
               ))}
             </div>
-            <p className="text-sm text-stone-500 mt-2">
+            <p className="text-sm text-muted-foreground mt-2">
               Capacity:{" "}
-              <span className="font-medium text-stone-700 capitalize">
+              <span className="font-medium text-foreground capitalize">
                 {wfc.seating.capacity}
               </span>
               {!wfc.seating.timeLimitHours && (
-                <span className="ml-2 text-emerald-600 text-xs font-medium">
+                <span className="ml-2 text-[var(--color-wfc-green)] text-xs font-medium">
                   No time limit
                 </span>
               )}
@@ -270,18 +279,18 @@ export function PlaceDetailPage() {
           <div className="space-y-3">
             <div className="flex flex-wrap gap-1.5">
               {wfc.menu.coffeeSpecialty && (
-                <Badge className="bg-amber-100 text-amber-800">
+                <Badge className="bg-[var(--color-wfc-amber-bg)] text-[var(--color-wfc-amber)] gap-1">
                   <Coffee className="w-3 h-3" />
                   Specialty coffee
                 </Badge>
               )}
               {wfc.menu.nonCoffee && (
-                <Badge className="bg-stone-100 text-stone-700">
+                <Badge className="bg-muted text-foreground">
                   Non-coffee drinks
                 </Badge>
               )}
               {wfc.menu.food && (
-                <Badge className="bg-stone-100 text-stone-700">
+                <Badge className="bg-muted text-foreground gap-1">
                   <UtensilsCrossed className="w-3 h-3" />
                   Food available
                 </Badge>
@@ -289,22 +298,22 @@ export function PlaceDetailPage() {
             </div>
             {wfc.menu.highlights && (
               <div>
-                <p className="text-xs font-medium text-stone-400 uppercase tracking-wide mb-1.5">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1.5">
                   Highlights
                 </p>
                 <ul className="space-y-1">
                   {wfc.menu.highlights.map((h) => (
-                    <li key={h} className="text-sm text-stone-600 flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-amber-400 flex-shrink-0" />
+                    <li key={h} className="text-sm text-muted-foreground flex items-center gap-1.5">
+                      <span className="w-1 h-1 rounded-full bg-[var(--color-wfc-amber)] flex-shrink-0" />
                       {h}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
-            <p className="text-sm text-stone-500">
+            <p className="text-sm text-muted-foreground">
               Price range:{" "}
-              <span className="font-medium text-stone-700">
+              <span className="font-medium text-foreground">
                 {priceRangeText(wfc.menu.priceRange)}
               </span>
             </p>
@@ -315,8 +324,8 @@ export function PlaceDetailPage() {
         <Section title="Opening Hours">
           <ul className="space-y-1">
             {place.openingHours.map((h) => (
-              <li key={h} className="text-sm text-stone-600 flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
+              <li key={h} className="text-sm text-muted-foreground flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-muted-foreground/60 flex-shrink-0" />
                 {h}
               </li>
             ))}
@@ -325,7 +334,7 @@ export function PlaceDetailPage() {
       </div>
 
       {/* Last verified */}
-      <p className="text-xs text-stone-400 pt-2 border-t border-stone-100">
+      <p className="text-xs text-muted-foreground pt-2 border-t border-border">
         WFC details last verified:{" "}
         <span className="font-medium">
           {new Date(place.lastVerified).toLocaleDateString("en-GB", {
@@ -335,7 +344,7 @@ export function PlaceDetailPage() {
           })}
         </span>
         . Spotted something wrong?{" "}
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
+        <a href="https://github.com/daffaromero/wfc" target="_blank" rel="noopener noreferrer" className="text-[var(--color-wfc-amber)] hover:underline">
           Suggest an edit
         </a>
         .
@@ -348,8 +357,8 @@ export function PlaceDetailPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-stone-200 rounded-2xl p-5 space-y-3">
-      <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wide">
+    <div className="bg-background border border-border rounded-2xl p-5 space-y-3">
+      <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
         {title}
       </h2>
       {children}
@@ -367,8 +376,8 @@ function WfcRow({
   value: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 py-1.5 border-b border-stone-100 last:border-0">
-      <div className="flex items-center gap-2 text-stone-500 text-sm">
+    <div className="flex items-center justify-between gap-4 py-1.5 border-b border-border last:border-0">
+      <div className="flex items-center gap-2 text-muted-foreground text-sm">
         {icon}
         {label}
       </div>
