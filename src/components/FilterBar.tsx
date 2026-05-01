@@ -80,7 +80,11 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             className={cn(
               "px-4 py-1.5 rounded text-sm font-medium transition-all",
               filters.city === c
-                ? "bg-[var(--color-wfc-blue)] text-white shadow-sm"
+                ? c === "jakarta"
+                  ? "bg-[var(--color-wfc-blue)] text-white shadow-sm"
+                  : c === "yogyakarta"
+                  ? "bg-[var(--color-wfc-green)] text-white shadow-sm"
+                  : "bg-foreground text-background shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >

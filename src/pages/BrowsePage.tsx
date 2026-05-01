@@ -16,6 +16,12 @@ const DEFAULT_FILTERS: PlaceFilters = {
   query: "",
 };
 
+const CITY_META: Record<PlaceFilters["city"], { name: string; color: string }> = {
+  all:        { name: "All cities",  color: "var(--background)" },
+  jakarta:    { name: "Jakarta",     color: "var(--color-wfc-blue)" },
+  yogyakarta: { name: "Yogyakarta",  color: "var(--color-wfc-green)" },
+};
+
 export function BrowsePage() {
   const [searchParams] = useSearchParams();
   const paramCity = searchParams.get("city") ?? "all";
@@ -29,37 +35,63 @@ export function BrowsePage() {
   });
   const { places, loading, error } = usePlaces(filters);
 
-  return (
-    <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-      <FilterBar
-        filters={filters}
-        onChange={setFilters}
-        totalCount={places.length}
-        filteredCount={places.length}
-      />
+  const meta = CITY_META[filters.city];
 
-      {/* Grid */}
-      {loading ? (
-        <div className="text-center py-20 text-muted-foreground">
-          <p className="text-lg font-medium">Loading cafes…</p>
+  return (
+    <div>
+      {/* City identity band — landing-page energy */}
+      <div className="bg-foreground">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+          <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-3">
+            Work-friendly cafes · Indonesia
+          </p>
+          <div className="flex items-end justify-between gap-4 flex-wrap">
+            <h1
+              className="text-6xl sm:text-7xl font-black tracking-tight leading-none"
+              style={{ color: meta.color }}
+            >
+              {meta.name}
+            </h1>
+            {!loading && (
+              <span className="text-background/30 font-bold text-lg mb-1 tabular-nums">
+                {places.length} {places.length === 1 ? "cafe" : "cafes"}
+              </span>
+            )}
+          </div>
         </div>
-      ) : error ? (
-        <div className="text-center py-20 text-red-500">
-          <p className="text-lg font-medium">Failed to load cafes.</p>
-          <p className="text-sm mt-1">{error}</p>
-        </div>
-      ) : places.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-          <p className="text-lg font-medium">No cafes match your filters.</p>
-          <p className="text-sm mt-1 text-muted-foreground">Try loosening the criteria.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {places.map((place) => (
-            <PlaceCard key={place.id} place={place} />
-          ))}
-        </div>
-      )}
-    </main>
+      </div>
+
+      {/* Content */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <FilterBar
+          filters={filters}
+          onChange={setFilters}
+          totalCount={places.length}
+          filteredCount={places.length}
+        />
+
+        {loading ? (
+          <div className="text-center py-20 text-muted-foreground">
+            <p className="text-lg font-medium">Loading cafes…</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-20 text-destructive">
+            <p className="text-lg font-medium">Failed to load cafes.</p>
+            <p className="text-sm mt-1">{error}</p>
+          </div>
+        ) : places.length === 0 ? (
+          <div className="text-center py-20 text-muted-foreground">
+            <p className="text-lg font-medium">No cafes match your filters.</p>
+            <p className="text-sm mt-1">Try loosening the criteria.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {places.map((place) => (
+              <PlaceCard key={place.id} place={place} />
+            ))}
+          </div>
+        )}
+      </main>
+    </div>
   );
 }

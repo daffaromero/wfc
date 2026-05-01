@@ -51,7 +51,7 @@ export function PlaceDetailPage() {
     return (
       <main className="max-w-6xl mx-auto px-4 py-20 text-center text-muted-foreground">
         <p className="text-xl font-medium">Place not found.</p>
-        <Link to="/" className="mt-4 inline-block text-[var(--color-wfc-amber)] hover:underline">
+        <Link to="/browse" className="mt-4 inline-block text-[var(--color-wfc-amber)] hover:underline">
           ← Back to directory
         </Link>
       </main>
@@ -64,7 +64,7 @@ export function PlaceDetailPage() {
     <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Back */}
       <Link
-        to="/"
+        to="/browse"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />

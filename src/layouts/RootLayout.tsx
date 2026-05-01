@@ -6,8 +6,8 @@ export function RootLayout() {
     <div className="min-h-svh bg-background">
       <Header />
       <Outlet />
-      <footer className="mt-16 border-t border-border py-6 text-center text-sm text-muted-foreground">
-        Curated. · Jakarta &amp; Yogyakarta · Built with ☕️
+      <footer className="mt-16 bg-foreground py-6 text-center text-sm text-background/30">
+        Curated<span className="text-[var(--color-wfc-amber)]">.</span> · Jakarta &amp; Yogyakarta · Built with ☕️
       </footer>
     </div>
   );
