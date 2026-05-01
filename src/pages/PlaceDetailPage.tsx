@@ -357,7 +357,7 @@ export function PlaceDetailPage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-background border border-border rounded-2xl p-5 space-y-3">
+    <div className="bg-background border border-border rounded-lg p-5 space-y-3">
       <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
         {title}
       </h2>

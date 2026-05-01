@@ -24,7 +24,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
 
   return (
     <Link to={`/place/${place.id}`} className="group block">
-      <Card className="overflow-hidden border border-border hover:border-foreground/20 hover:shadow-md transition-all duration-200 p-0 gap-0">
+      <Card className="overflow-hidden border border-border hover:border-foreground/40 hover:shadow-lg transition-all duration-150 p-0 gap-0 rounded-lg">
         {/* Cover photo */}
         <div className="relative h-44 overflow-hidden bg-muted">
           {coverPhoto ? (
@@ -40,11 +40,11 @@ export function PlaceCard({ place }: PlaceCardProps) {
             </div>
           )}
           {/* City pill */}
-          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur text-foreground text-xs font-medium px-2 py-1 rounded-full">
+          <span className="absolute top-3 left-3 bg-white/95 text-foreground text-xs font-semibold px-2 py-0.5 rounded">
             {cityLabel(place.city)}
           </span>
           {/* Price range */}
-          <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-foreground text-xs font-semibold px-2 py-1 rounded-full">
+          <span className="absolute top-3 right-3 bg-white/95 text-foreground text-xs font-bold px-2 py-0.5 rounded">
             {PRICE_SYMBOLS[wfc.menu.priceRange]}
           </span>
         </div>
@@ -53,7 +53,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
         <div className="flex flex-col flex-1 p-4 gap-3">
           {/* Name + area */}
           <div>
-            <h3 className="font-semibold text-foreground text-base leading-snug">
+            <h3 className="font-bold text-foreground text-base leading-snug">
               {place.name}
             </h3>
             <p className="text-muted-foreground text-sm flex items-center gap-1 mt-0.5">
@@ -75,12 +75,12 @@ export function PlaceCard({ place }: PlaceCardProps) {
           <div className="flex flex-wrap gap-1.5 mt-auto">
             {/* WiFi */}
             {wfc.wifi.available ? (
-              <Badge className={cn("rounded-full", wifiSpeedVariant(wfc.wifi.speed))}>
+              <Badge className={cn("rounded", wifiSpeedVariant(wfc.wifi.speed))}>
                 <Wifi className="w-3 h-3" />
                 {wifiSpeedLabel(wfc.wifi.speed)}
               </Badge>
             ) : (
-              <Badge className="rounded-full bg-secondary text-muted-foreground">
+              <Badge className="rounded bg-secondary text-muted-foreground">
                 <WifiOff className="w-3 h-3" />
                 No WiFi
               </Badge>
@@ -88,20 +88,20 @@ export function PlaceCard({ place }: PlaceCardProps) {
 
             {/* Plugs */}
             {wfc.plugs !== "none" && (
-              <Badge className={cn("rounded-full", plugsVariant(wfc.plugs))}>
+              <Badge className={cn("rounded", plugsVariant(wfc.plugs))}>
                 <Plug className="w-3 h-3" />
                 {wfc.plugs === "ample" ? "Ample plugs" : "Some plugs"}
               </Badge>
             )}
 
             {/* Noise */}
-            <Badge className={cn("rounded-full", noiseLevelVariant(wfc.noiseLevel))}>
+            <Badge className={cn("rounded", noiseLevelVariant(wfc.noiseLevel))}>
               {wfc.noiseLevel.charAt(0).toUpperCase() + wfc.noiseLevel.slice(1)}
             </Badge>
 
             {/* Prayer room */}
             {wfc.prayerRoom && (
-              <Badge className="rounded-full bg-[var(--color-wfc-teal-bg)] text-[var(--color-wfc-teal)]">
+              <Badge className="rounded bg-[var(--color-wfc-teal-bg)] text-[var(--color-wfc-teal)]">
                 Prayer room
               </Badge>
             )}

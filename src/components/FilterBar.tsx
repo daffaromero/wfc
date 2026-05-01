@@ -54,7 +54,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             placeholder="Search cafes, areas, tags…"
             value={filters.query}
             onChange={(e) => set("query", e.target.value)}
-            className="pl-9 rounded-xl"
+            className="pl-9 rounded-md"
           />
         </div>
         {/* Always rendered to prevent layout shift; hidden when no active filters */}
@@ -62,7 +62,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           onClick={() => onChange({ ...DEFAULT_FILTERS })}
           aria-hidden={!hasActiveFilters}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors",
+            "flex items-center gap-1.5 px-3 py-2.5 rounded-md border border-border bg-background text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors",
             !hasActiveFilters && "invisible pointer-events-none"
           )}
         >
@@ -72,13 +72,13 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       </div>
 
       {/* City tabs */}
-      <div className="flex gap-1 bg-muted p-1 rounded-xl w-fit">
+      <div className="flex gap-0.5 bg-muted p-0.5 rounded-md w-fit">
         {(["all", "jakarta", "yogyakarta"] as const).map((c) => (
           <button
             key={c}
             onClick={() => set("city", c)}
             className={cn(
-              "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
+              "px-4 py-1.5 rounded text-sm font-medium transition-all",
               filters.city === c
                 ? "bg-[var(--color-wfc-blue)] text-white shadow-sm"
                 : "text-muted-foreground hover:text-foreground"
@@ -107,7 +107,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.plugs}
           onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
+            "px-3 py-1.5 rounded text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
             filters.plugs !== "any"
               ? "bg-[var(--color-wfc-green)] text-white border-transparent"
               : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
@@ -124,7 +124,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.noiseLevel}
           onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
+            "px-3 py-1.5 rounded text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
             filters.noiseLevel === "quiet"
               ? "bg-[var(--color-wfc-green)] text-white border-transparent"
               : filters.noiseLevel === "moderate"
@@ -165,7 +165,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])
           }
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
+            "px-3 py-1.5 rounded text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
             filters.maxPriceRange !== 4
               ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
               : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
@@ -216,7 +216,7 @@ function FilterChip({
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded-full text-sm border font-medium transition-all",
+        "px-3 py-1.5 rounded text-sm border font-medium transition-all",
         active
           ? activeClasses[activeColor]
           : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
