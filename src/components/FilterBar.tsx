@@ -57,28 +57,31 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             className="pl-9 rounded-xl"
           />
         </div>
-        {hasActiveFilters && (
-          <button
-            onClick={() => onChange({ ...DEFAULT_FILTERS })}
-            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 hover:bg-stone-50 transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-            Reset
-          </button>
-        )}
+        {/* Always rendered to prevent layout shift; hidden when no active filters */}
+        <button
+          onClick={() => onChange({ ...DEFAULT_FILTERS })}
+          aria-hidden={!hasActiveFilters}
+          className={cn(
+            "flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors",
+            !hasActiveFilters && "invisible pointer-events-none"
+          )}
+        >
+          <X className="w-3.5 h-3.5" />
+          Reset
+        </button>
       </div>
 
       {/* City tabs */}
-      <div className="flex gap-1 bg-stone-100 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-muted p-1 rounded-xl w-fit">
         {(["all", "jakarta", "yogyakarta"] as const).map((c) => (
           <button
             key={c}
             onClick={() => set("city", c)}
             className={cn(
-              "px-4 py-1.5 rounded-lg text-sm font-medium transition-colors",
+              "px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
               filters.city === c
-                ? "bg-white text-stone-900 shadow-sm"
-                : "text-stone-500 hover:text-stone-700"
+                ? "bg-[var(--color-wfc-blue)] text-white shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
             )}
           >
             {c === "all" ? "All" : c === "jakarta" ? "Jakarta" : "Yogyakarta"}
@@ -93,6 +96,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         {/* WiFi */}
         <FilterChip
           active={filters.wifiAvailable}
+          activeColor="green"
           onClick={() => set("wifiAvailable", !filters.wifiAvailable)}
         >
           WiFi available
@@ -103,10 +107,10 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.plugs}
           onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
             filters.plugs !== "any"
-              ? "bg-foreground text-background border-foreground"
-              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+              ? "bg-[var(--color-wfc-green)] text-white border-transparent"
+              : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
           )}
         >
           <option value="any">Any plugs</option>
@@ -120,10 +124,14 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
           value={filters.noiseLevel}
           onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
-            filters.noiseLevel !== "any"
-              ? "bg-foreground text-background border-foreground"
-              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
+            filters.noiseLevel === "quiet"
+              ? "bg-[var(--color-wfc-green)] text-white border-transparent"
+              : filters.noiseLevel === "moderate"
+              ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
+              : filters.noiseLevel === "loud"
+              ? "bg-[var(--color-wfc-red)] text-white border-transparent"
+              : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
           )}
         >
           <option value="any">Any noise</option>
@@ -135,6 +143,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         {/* Prayer room */}
         <FilterChip
           active={filters.prayerRoom === true}
+          activeColor="teal"
           onClick={() => set("prayerRoom", filters.prayerRoom === true ? null : true)}
         >
           Prayer room
@@ -143,6 +152,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         {/* Parking */}
         <FilterChip
           active={filters.parking === true}
+          activeColor="green"
           onClick={() => set("parking", filters.parking === true ? null : true)}
         >
           Has parking
@@ -155,10 +165,10 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])
           }
           className={cn(
-            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring",
+            "px-3 py-1.5 rounded-full text-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer",
             filters.maxPriceRange !== 4
-              ? "bg-foreground text-background border-foreground"
-              : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+              ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
+              : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
           )}
         >
           <option value={4}>Any price</option>
@@ -186,21 +196,30 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
 
 function FilterChip({
   active,
+  activeColor = "blue",
   onClick,
   children,
 }: {
   active: boolean;
+  activeColor?: "green" | "teal" | "blue" | "amber" | "red";
   onClick: () => void;
   children: React.ReactNode;
 }) {
+  const activeClasses: Record<string, string> = {
+    green: "bg-[var(--color-wfc-green)] text-white border-transparent",
+    teal:  "bg-[var(--color-wfc-teal)] text-white border-transparent",
+    blue:  "bg-[var(--color-wfc-blue)] text-white border-transparent",
+    amber: "bg-[var(--color-wfc-amber)] text-white border-transparent",
+    red:   "bg-[var(--color-wfc-red)] text-white border-transparent",
+  };
   return (
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded-full text-sm border font-medium transition-colors",
+        "px-3 py-1.5 rounded-full text-sm border font-medium transition-all",
         active
-          ? "bg-foreground text-background border-foreground"
-          : "bg-white text-stone-600 border-stone-200 hover:border-stone-300"
+          ? activeClasses[activeColor]
+          : "bg-background text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground"
       )}
     >
       {children}
