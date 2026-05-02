@@ -3,12 +3,10 @@ import { Header } from "../components/Header";
 
 export function RootLayout() {
   return (
-    <div className="min-h-svh bg-background">
+    <div className="min-h-svh bg-foreground">
       <Header />
       <Outlet />
-      {/* Gradient seam: white content → dark footer */}
-      <div className="h-10 bg-gradient-to-b from-background to-foreground" />
-      <footer className="bg-foreground py-6 text-center text-sm text-background/30">
+      <footer className="border-t border-background/10 py-6 text-center text-sm text-background/30">
         Curated<span className="text-[var(--color-wfc-amber)]">.</span> · Jakarta &amp; Yogyakarta · Built with ☕️
       </footer>
     </div>

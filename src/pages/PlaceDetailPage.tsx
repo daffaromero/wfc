@@ -62,9 +62,9 @@ export function PlaceDetailPage() {
 
   return (
     <>
-      {/* Dark zone: back link sits on the same dark surface as the header */}
-      <div className="bg-foreground">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-5 pb-6">
+      {/* Dark zone: back link on same surface as header */}
+      <div className="bg-foreground border-b border-background/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
           <Link
             to="/browse"
             className="inline-flex items-center gap-1.5 text-sm text-background/50 hover:text-background transition-colors"
@@ -73,11 +73,10 @@ export function PlaceDetailPage() {
             Back to directory
           </Link>
         </div>
-        {/* Gradient seam: dark → white */}
-        <div className="h-10 bg-gradient-to-b from-foreground to-background" />
       </div>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 pb-8 space-y-8">
+      <div className="bg-background">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
       {/* Photo gallery */}
       <PhotoGallery photos={place.photos} name={place.name} />
 
@@ -357,6 +356,7 @@ export function PlaceDetailPage() {
         .
       </p>
     </main>
+      </div>
     </>
   );
 }

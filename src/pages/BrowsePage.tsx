@@ -38,33 +38,29 @@ export function BrowsePage() {
   const meta = CITY_META[filters.city];
 
   return (
-    <div>
-      {/* City identity band — seamless continuation of the dark header */}
-      <div className="bg-foreground">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-8 sm:pb-10">
-          <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-3">
-            Work-friendly cafes · Indonesia
-          </p>
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <h1
-              className="text-6xl sm:text-7xl font-black tracking-tight leading-none"
-              style={{ color: meta.color }}
-            >
-              {meta.name}
-            </h1>
-            {!loading && (
-              <span className="text-background/30 font-bold text-lg mb-1 tabular-nums">
-                {places.length} {places.length === 1 ? "cafe" : "cafes"}
-              </span>
-            )}
-          </div>
+    <div className="bg-foreground min-h-screen">
+      {/* City identity band */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-8 sm:pb-10">
+        <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-3">
+          Work-friendly cafes · Indonesia
+        </p>
+        <div className="flex items-end justify-between gap-4 flex-wrap">
+          <h1
+            className="text-6xl sm:text-7xl font-black tracking-tight leading-none"
+            style={{ color: meta.color }}
+          >
+            {meta.name}
+          </h1>
+          {!loading && (
+            <span className="text-background/30 font-bold text-lg mb-1 tabular-nums">
+              {places.length} {places.length === 1 ? "cafe" : "cafes"}
+            </span>
+          )}
         </div>
       </div>
-      {/* Gradient seam: dark band → white content */}
-      <div className="h-10 bg-gradient-to-b from-foreground to-background" />
 
-      {/* Content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-6 space-y-6">
+      {/* Content — stays on dark canvas */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 space-y-6">
         <FilterBar
           filters={filters}
           onChange={setFilters}
@@ -73,21 +69,21 @@ export function BrowsePage() {
         />
 
         {loading ? (
-          <div className="text-center py-20 text-muted-foreground">
-            <p className="text-lg font-medium">Loading cafes…</p>
+          <div className="text-center py-20">
+            <p className="text-lg font-medium text-background/50">Loading cafes…</p>
           </div>
         ) : error ? (
-          <div className="text-center py-20 text-destructive">
-            <p className="text-lg font-medium">Failed to load cafes.</p>
-            <p className="text-sm mt-1">{error}</p>
+          <div className="text-center py-20">
+            <p className="text-lg font-medium text-[var(--color-wfc-red)]">Failed to load cafes.</p>
+            <p className="text-sm mt-1 text-background/40">{error}</p>
           </div>
         ) : places.length === 0 ? (
-          <div className="text-center py-20 text-muted-foreground">
-            <p className="text-lg font-medium">No cafes match your filters.</p>
-            <p className="text-sm mt-1">Try loosening the criteria.</p>
+          <div className="text-center py-20">
+            <p className="text-lg font-medium text-background/50">No cafes match your filters.</p>
+            <p className="text-sm mt-1 text-background/30">Try loosening the criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {places.map((place) => (
               <PlaceCard key={place.id} place={place} />
             ))}
