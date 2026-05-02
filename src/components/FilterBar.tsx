@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PlaceFilters } from "../types/place";
 
@@ -43,28 +43,27 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
   }
 
   // Dark-canvas variants
-  const inactiveChip = "border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors";
-  const inactiveSelect = "border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors focus:outline-none cursor-pointer";
+  const inactiveChip = "border border-background/20 text-background/75 hover:text-background hover:border-background/50 transition-colors";
 
   return (
     <div className="space-y-0">
-      {/* Search + reset row */}
-      <div className="flex gap-2 pb-4">
+      {/* Search row */}
+      <div className="flex gap-2 pb-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-background/30 pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-background/60 pointer-events-none" />
           <input
             type="text"
             placeholder="Search cafes, areas, tags…"
             value={filters.query}
             onChange={(e) => set("query", e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 bg-background/8 border border-background/15 text-background placeholder:text-background/30 text-sm focus:outline-none focus:border-background/40 transition-colors"
+            className="w-full pl-9 pr-4 py-2 bg-background/8 border border-background/20 text-background placeholder:text-background/60 text-sm focus:outline-none focus:border-background/50 transition-colors"
           />
         </div>
         <button
           onClick={() => onChange({ ...DEFAULT_FILTERS })}
           aria-hidden={!hasActiveFilters}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium transition-colors",
+            "flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors",
             inactiveChip,
             !hasActiveFilters && "invisible pointer-events-none"
           )}
@@ -74,90 +73,85 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         </button>
       </div>
 
-      {/* City tabs — hard segments with a bottom rule */}
-      <div className="flex border-t border-b border-background/15">
+      {/* City tabs + filter chips — single scrollable row */}
+      <div className="flex border-t border-b border-background/15 overflow-x-auto [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
+        {/* City tabs */}
         {(["all", "jakarta", "yogyakarta"] as const).map((c) => (
           <button
             key={c}
             onClick={() => set("city", c)}
             className={cn(
-              "px-5 py-2.5 text-sm font-semibold transition-all border-r border-background/15 last:border-r-0",
+              "flex-shrink-0 px-4 py-2 text-sm font-semibold transition-all border-r border-background/15",
               filters.city === c
                 ? c === "jakarta"
                   ? "bg-[var(--color-wfc-blue)] text-white"
                   : c === "yogyakarta"
                   ? "bg-[var(--color-wfc-green)] text-white"
                   : "bg-background/20 text-background"
-                : "text-background/40 hover:text-background hover:bg-background/8"
+                : "text-background/65 hover:text-background hover:bg-background/8"
             )}
           >
             {c === "all" ? "All" : c === "jakarta" ? "Jakarta" : "Yogyakarta"}
           </button>
         ))}
-      </div>
 
-      {/* Filter chips row */}
-      <div className="flex flex-wrap gap-1.5 items-center pt-3 pb-1">
-        <SlidersHorizontal className="w-4 h-4 text-background/30 flex-shrink-0" />
+        {/* Divider between city and filter chips */}
+        <span className="w-px bg-background/25 flex-shrink-0" />
 
-        {/* WiFi */}
+        {/* Filter chips — inline with city tabs */}
         <FilterChip active={filters.wifiAvailable} activeColor="green"
           onClick={() => set("wifiAvailable", !filters.wifiAvailable)}>
-          WiFi available
+          WiFi
         </FilterChip>
 
-        {/* Plugs */}
         <select
           value={filters.plugs}
           onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
-          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent", filters.plugs !== "any"
-            ? "bg-[var(--color-wfc-green)] text-white border-transparent"
-            : inactiveSelect)}
+          className={cn("flex-shrink-0 px-3 py-2 text-sm border-r font-medium bg-foreground cursor-pointer focus:outline-none",
+            filters.plugs !== "any"
+              ? "bg-[var(--color-wfc-green)] text-white border-transparent"
+              : "border-background/20 text-background/75 hover:text-background")}
         >
-          <option value="any">Any plugs</option>
+          <option value="any">Plugs ▾</option>
           <option value="ample">Ample plugs</option>
           <option value="limited">Some plugs</option>
           <option value="none">No plugs</option>
         </select>
 
-        {/* Noise */}
         <select
           value={filters.noiseLevel}
           onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
-          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent",
+          className={cn("flex-shrink-0 px-3 py-2 text-sm border-r font-medium bg-foreground cursor-pointer focus:outline-none",
             filters.noiseLevel === "quiet" ? "bg-[var(--color-wfc-green)] text-white border-transparent"
             : filters.noiseLevel === "moderate" ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
             : filters.noiseLevel === "loud" ? "bg-[var(--color-wfc-red)] text-white border-transparent"
-            : inactiveSelect)}
+            : "border-background/20 text-background/75 hover:text-background")}
         >
-          <option value="any">Any noise</option>
+          <option value="any">Noise ▾</option>
           <option value="quiet">Quiet</option>
           <option value="moderate">Moderate</option>
-          <option value="loud">Loud/Lively</option>
+          <option value="loud">Loud</option>
         </select>
 
-        {/* Prayer room */}
         <FilterChip active={filters.prayerRoom === true} activeColor="teal"
           onClick={() => set("prayerRoom", filters.prayerRoom === true ? null : true)}>
-          Prayer room
+          Prayer
         </FilterChip>
 
-        {/* Parking */}
         <FilterChip active={filters.parking === true} activeColor="green"
           onClick={() => set("parking", filters.parking === true ? null : true)}>
-          Has parking
+          Parking
         </FilterChip>
 
-        {/* Price */}
         <select
           value={filters.maxPriceRange}
           onChange={(e) => set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])}
-          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent",
+          className={cn("flex-shrink-0 px-3 py-2 text-sm font-medium bg-foreground cursor-pointer focus:outline-none",
             filters.maxPriceRange !== 4
               ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
-              : inactiveSelect)}
+              : "border-l border-background/20 text-background/75 hover:text-background")}
         >
-          <option value={4}>Any price</option>
+          <option value={4}>Price ▾</option>
           {([1, 2, 3] as const).map((v) => (
             <option key={v} value={v}>Up to {PRICE_LABELS[v]}</option>
           ))}
@@ -165,7 +159,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       </div>
 
       {/* Result count */}
-      <p className="text-xs text-background/40 font-medium pb-3">
+      <p className="text-xs text-background/65 font-medium py-2">
         {filteredCount === totalCount ? (
           <span>{totalCount} places</span>
         ) : (
@@ -191,20 +185,20 @@ function FilterChip({
   children: React.ReactNode;
 }) {
   const activeClasses: Record<string, string> = {
-    green: "bg-[var(--color-wfc-green)] text-white border-transparent",
-    teal:  "bg-[var(--color-wfc-teal)] text-white border-transparent",
-    blue:  "bg-[var(--color-wfc-blue)] text-white border-transparent",
-    amber: "bg-[var(--color-wfc-amber)] text-white border-transparent",
-    red:   "bg-[var(--color-wfc-red)] text-white border-transparent",
+    green: "bg-[var(--color-wfc-green)] text-white",
+    teal:  "bg-[var(--color-wfc-teal)] text-white",
+    blue:  "bg-[var(--color-wfc-blue)] text-white",
+    amber: "bg-[var(--color-wfc-amber)] text-white",
+    red:   "bg-[var(--color-wfc-red)] text-white",
   };
   return (
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 text-sm border font-medium transition-all",
+        "flex-shrink-0 px-3 py-2 text-sm font-semibold border-r border-background/15 transition-all",
         active
           ? activeClasses[activeColor]
-          : "border-background/15 text-background/50 hover:text-background hover:border-background/30"
+          : "text-background/65 hover:text-background hover:bg-background/8"
       )}
     >
       {children}

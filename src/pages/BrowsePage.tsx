@@ -41,7 +41,7 @@ export function BrowsePage() {
     <div className="bg-foreground min-h-screen">
       {/* City identity band */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 pb-6">
-        <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-2">
+        <p className="text-background/60 text-xs font-semibold uppercase tracking-[0.2em] mb-2">
           Work-friendly cafes · Indonesia
         </p>
         <div className="flex items-end justify-between gap-4 flex-wrap">
@@ -52,7 +52,7 @@ export function BrowsePage() {
             {meta.name}
           </h1>
           {!loading && (
-            <span className="text-background/30 font-bold text-lg mb-1 tabular-nums">
+            <span className="text-background/70 font-medium text-lg mb-1 tabular-nums">
               {places.length} {places.length === 1 ? "cafe" : "cafes"}
             </span>
           )}
@@ -72,20 +72,20 @@ export function BrowsePage() {
 
         {loading ? (
           <div className="text-center py-20">
-            <p className="text-lg font-medium text-background/50">Loading cafes…</p>
+            <p className="text-lg font-medium text-background/80">Loading cafes…</p>
           </div>
         ) : error ? (
           <div className="text-center py-20">
             <p className="text-lg font-medium text-[var(--color-wfc-red)]">Failed to load cafes.</p>
-            <p className="text-sm mt-1 text-background/40">{error}</p>
+            <p className="text-sm mt-1 text-background/70">{error}</p>
           </div>
         ) : places.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-lg font-medium text-background/50">No cafes match your filters.</p>
-            <p className="text-sm mt-1 text-background/30">Try loosening the criteria.</p>
+            <p className="text-lg font-medium text-background/80">No cafes match your filters.</p>
+            <p className="text-sm mt-1 text-background/60">Try loosening the criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-background/15">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {places.map((place) => (
               <PlaceCard key={place.id} place={place} />
             ))}

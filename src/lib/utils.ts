@@ -42,7 +42,7 @@ export function noiseLevelVariant(level: "quiet" | "moderate" | "loud"): string 
 
 /** @deprecated use noiseLevelVariant */
 export function noiseLevelColor(level: "quiet" | "moderate" | "loud"): string {
-  return noiseLevelVariant(level);
+  return { quiet: "var(--color-wfc-green)", moderate: "var(--color-wfc-amber)", loud: "var(--color-wfc-red)" }[level];
 }
 
 export function wifiSpeedVariant(speed?: "slow" | "moderate" | "fast"): string {
@@ -56,7 +56,8 @@ export function wifiSpeedVariant(speed?: "slow" | "moderate" | "fast"): string {
 
 /** @deprecated use wifiSpeedVariant */
 export function wifiSpeedColor(speed?: "slow" | "moderate" | "fast"): string {
-  return wifiSpeedVariant(speed);
+  if (!speed) return "var(--color-wfc-red)";
+  return { slow: "var(--color-wfc-red)", moderate: "var(--color-wfc-amber)", fast: "var(--color-wfc-green)" }[speed];
 }
 
 export function plugsVariant(plugs: "none" | "limited" | "ample"): string {
@@ -65,6 +66,10 @@ export function plugsVariant(plugs: "none" | "limited" | "ample"): string {
     limited: "bg-[var(--color-wfc-amber)] text-white",
     none:    "bg-[var(--color-wfc-red)] text-white",
   }[plugs];
+}
+
+export function plugsColor(plugs: "none" | "limited" | "ample"): string {
+  return { ample: "var(--color-wfc-green)", limited: "var(--color-wfc-amber)", none: "var(--color-wfc-red)" }[plugs];
 }
 
 // ─── Filter logic (still used by API query builder) ──────────────────────

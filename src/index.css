@@ -20,8 +20,9 @@
   --radius: 0rem;
 
   /* Typography */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-heading: var(--font-sans);
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-heading: "Geist", "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Geist Mono", monospace;
 
   /* shadcn semantic color bridge */
   --color-background:         var(--background);
@@ -56,8 +57,12 @@
   --color-wfc-teal-bg:       oklch(0.95 0.04 195);
 }
 
+body {
+  font-family: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
 :root {
-  --background:           oklch(1 0 0);           /* pure white */
   --foreground:           oklch(0.16 0 0);         /* near-black */
   --card:                 oklch(1 0 0);
   --card-foreground:      oklch(0.16 0 0);

@@ -1,13 +1,12 @@
-import { Wifi, WifiOff, Plug, Star, MapPin } from "lucide-react";
+import { Wifi, WifiOff, Plug, Star, MapPin, Moon, VolumeX, Volume1, Volume2 } from "lucide-react";
 import { Link } from "react-router";
 import type { Place } from "../types/place";
-import { Badge } from "@/components/ui/badge";
 import {
   cn,
-  noiseLevelVariant,
-  wifiSpeedVariant,
   wifiSpeedLabel,
-  plugsVariant,
+  wifiSpeedColor,
+  noiseLevelColor,
+  plugsColor,
   cityLabel,
 } from "@/lib/utils";
 
@@ -15,18 +14,51 @@ interface PlaceCardProps {
   place: Place;
 }
 
-const PRICE_SYMBOLS = ["", "Rp", "Rp Rp", "Rp Rp Rp", "Rp Rp Rp Rp"];
+const PRICE_LABELS = ["", "< Rp 50K", "Rp 50–100K", "Rp 100–200K", "> Rp 200K"];
 
 export function PlaceCard({ place }: PlaceCardProps) {
   const { wfc } = place;
   const coverPhoto = place.photos[0];
 
+  type StatCol = { color: string; icon?: React.ReactNode; label: string };
+  const cols: StatCol[] = [];
+
+  cols.push({
+    color: wifiSpeedColor(wfc.wifi.available ? wfc.wifi.speed : undefined),
+    icon: wfc.wifi.available ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />,
+    label: wfc.wifi.available ? wifiSpeedLabel(wfc.wifi.speed) : "No WiFi",
+  });
+
+  if (wfc.plugs !== "none") {
+    cols.push({
+      color: plugsColor(wfc.plugs),
+      icon: <Plug className="w-3 h-3" />,
+      label: "Plugs",
+    });
+  }
+
+  if (wfc.prayerRoom) {
+    cols.push({ color: "var(--color-wfc-teal)", icon: <Moon className="w-3 h-3" />, label: "Musalla" });
+  }
+
+  const noiseIcon = wfc.noiseLevel === "quiet"
+    ? <VolumeX className="w-3 h-3" />
+    : wfc.noiseLevel === "moderate"
+    ? <Volume1 className="w-3 h-3" />
+    : <Volume2 className="w-3 h-3" />;
+
+  cols.push({
+    color: noiseLevelColor(wfc.noiseLevel),
+    icon: noiseIcon,
+    label: wfc.noiseLevel.charAt(0).toUpperCase() + wfc.noiseLevel.slice(1),
+  });
+
   return (
     <Link to={`/place/${place.id}`} className="group block">
-      {/* Fills its grid cell directly — no border/radius, grid gap-px creates the lines */}
-      <div className="overflow-hidden hover:bg-background/10 transition-colors duration-150 bg-background/6 h-full">
-        {/* Cover photo */}
-        <div className="relative h-44 overflow-hidden bg-background/10">
+      <div className="flex flex-col border border-white/10" style={{ backgroundColor: "oklch(0.10 0 0)" }}>
+
+        {/* ── Photo: fixed height ── */}
+        <div className="relative h-36 overflow-hidden bg-white/5 flex-shrink-0">
           {coverPhoto ? (
             <img
               src={coverPhoto}
@@ -35,78 +67,57 @@ export function PlaceCard({ place }: PlaceCardProps) {
               loading="lazy"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-background/30 text-sm">
+            <div className="w-full h-full flex items-center justify-center text-white/20 text-xs">
               No photo
             </div>
           )}
-          {/* City pill */}
-          <span
-            className={cn(
-              "absolute top-0 left-0 text-white text-xs font-bold px-2.5 py-1.5",
-              place.city === "jakarta"
-                ? "bg-[var(--color-wfc-blue)]"
-                : "bg-[var(--color-wfc-green)]"
-            )}
-          >
+          {/* City — bottom-left of photo */}
+          <span className={cn(
+            "absolute bottom-0 left-0 px-2.5 py-1.5 text-white text-xs font-semibold",
+            place.city === "jakarta"
+              ? "bg-[var(--color-wfc-blue)]"
+              : "bg-[var(--color-wfc-green)]"
+          )}>
             {cityLabel(place.city)}
           </span>
-          {/* Price range */}
-          <span className="absolute top-0 right-0 bg-black/60 text-white text-xs font-bold px-2.5 py-1.5">
-            {PRICE_SYMBOLS[wfc.menu.priceRange]}
+          {/* Price — bottom-right of photo */}
+          <span className="absolute bottom-0 right-0 px-2.5 py-1.5 text-white text-xs font-semibold bg-[var(--color-wfc-amber)]">
+            {PRICE_LABELS[wfc.menu.priceRange]}
           </span>
         </div>
 
-        {/* Body */}
-        <div className="flex flex-col flex-1 p-4 gap-3">
-          {/* Name + area */}
-          <div>
-            <h3 className="font-bold text-background text-base leading-snug">
+        {/* ── Body ── */}
+        <div className="px-3 pt-2.5 pb-0">
+          <div className="flex items-baseline justify-between gap-2">
+            <h3 className="font-medium text-white text-base leading-snug">
               {place.name}
             </h3>
-            <p className="text-background/40 text-sm flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-              {place.area}
-            </p>
-          </div>
-
-          {/* Google rating */}
-          {place.googleRating && (
-            <div className="flex items-center gap-1 text-sm text-background/40">
-              <Star className="w-3.5 h-3.5 fill-[var(--color-wfc-amber)] text-[var(--color-wfc-amber)]" />
-              <span className="font-medium text-background/80">{place.googleRating.toFixed(1)}</span>
-              <span>({place.totalRatings?.toLocaleString()})</span>
-            </div>
-          )}
-
-          {/* Key WFC badges */}
-          <div className="flex flex-wrap gap-1 mt-auto">
-            {wfc.wifi.available ? (
-              <Badge className={cn("rounded-none text-xs", wifiSpeedVariant(wfc.wifi.speed))}>
-                <Wifi className="w-3 h-3" />
-                {wifiSpeedLabel(wfc.wifi.speed)}
-              </Badge>
-            ) : (
-              <Badge className="rounded-none text-xs bg-background/10 text-background/40 border-0">
-                <WifiOff className="w-3 h-3" />
-                No WiFi
-              </Badge>
-            )}
-            {wfc.plugs !== "none" && (
-              <Badge className={cn("rounded-none text-xs", plugsVariant(wfc.plugs))}>
-                <Plug className="w-3 h-3" />
-                {wfc.plugs === "ample" ? "Ample plugs" : "Some plugs"}
-              </Badge>
-            )}
-            <Badge className={cn("rounded-none text-xs", noiseLevelVariant(wfc.noiseLevel))}>
-              {wfc.noiseLevel.charAt(0).toUpperCase() + wfc.noiseLevel.slice(1)}
-            </Badge>
-            {wfc.prayerRoom && (
-              <Badge className="rounded-none text-xs bg-[var(--color-wfc-teal)] text-white border-0">
-                Prayer room
-              </Badge>
+            {place.googleRating && (
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <span className="text-white text-xs">{place.googleRating.toFixed(1)}</span>
+                <Star className="w-3 h-3 fill-[var(--color-wfc-amber)] text-[var(--color-wfc-amber)]" />
+              </div>
             )}
           </div>
+          <p className="text-white text-sm flex items-center gap-1 mt-1 opacity-75">
+            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+            {place.area}
+          </p>
         </div>
+
+        {/* ── Stats strip ── */}
+        <div className="flex gap-[3px] px-3 pt-3 pb-3">
+          {cols.map((col, i) => (
+            <div key={i} className="flex-1 flex flex-col gap-1.5">
+              <div className="h-1.5" style={{ backgroundColor: col.color }} />
+              <div className="flex items-center gap-1 text-white text-xs">
+                {col.icon}
+                <span>{col.label}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </Link>
   );

@@ -32,12 +32,12 @@ export function LandingPage() {
     <div className="min-h-svh flex flex-col bg-foreground text-background overflow-hidden">
       {/* Top bar */}
       <header className="flex-shrink-0 px-6 sm:px-10 h-14 flex items-center justify-between">
-        <span className="text-xl font-black tracking-tight text-background">
-          Curated<span className="text-[var(--color-wfc-amber)]">.</span>
+        <span className="inline-flex items-center gap-1 text-xl font-black tracking-tight text-background" style={{ fontFamily: 'Geist, sans-serif' }}>
+          Curated<span className="inline-block w-2.5 h-2.5 bg-[var(--color-wfc-green)] flex-shrink-0" />
         </span>
         <Link
           to="/browse"
-          className="flex items-center gap-1.5 text-sm font-semibold text-background/50 hover:text-background transition-colors"
+          className="flex items-center gap-1.5 text-sm font-semibold text-background/80 hover:text-background transition-colors"
         >
           Browse all
           <ArrowRight className="w-3.5 h-3.5" />
@@ -47,7 +47,7 @@ export function LandingPage() {
       {/* Hero */}
       <div className="flex-1 flex flex-col justify-center px-6 sm:px-10 py-12 gap-6">
         <div className="space-y-4">
-          <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em]">
+          <p className="text-background/65 text-xs font-semibold uppercase tracking-[0.2em]">
             Work-friendly cafes · Indonesia
           </p>
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black leading-none tracking-tight text-background">
