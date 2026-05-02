@@ -40,8 +40,8 @@ export function BrowsePage() {
   return (
     <div className="bg-foreground min-h-screen">
       {/* City identity band */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-8 sm:pb-10">
-        <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 pb-6">
+        <p className="text-background/30 text-xs font-bold uppercase tracking-[0.2em] mb-2">
           Work-friendly cafes · Indonesia
         </p>
         <div className="flex items-end justify-between gap-4 flex-wrap">
@@ -58,9 +58,11 @@ export function BrowsePage() {
           )}
         </div>
       </div>
+      {/* Hard rule between headline and content */}
+      <div className="border-t border-background/15" />
 
       {/* Content — stays on dark canvas */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 pb-12 space-y-6">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-5 pb-12 space-y-4">
         <FilterBar
           filters={filters}
           onChange={setFilters}
@@ -83,7 +85,7 @@ export function BrowsePage() {
             <p className="text-sm mt-1 text-background/30">Try loosening the criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-background/15">
             {places.map((place) => (
               <PlaceCard key={place.id} place={place} />
             ))}

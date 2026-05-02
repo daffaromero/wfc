@@ -11,13 +11,13 @@
 /*   Blue   → featured / info / verified                                       */
 
 @theme inline {
-  /* Radius — sharp, modern */
-  --radius-sm: 0.1875rem;  /* 3px */
-  --radius-md: 0.3125rem;  /* 5px */
-  --radius-lg: 0.5rem;     /* 8px */
-  --radius-xl: 0.625rem;   /* 10px */
-  --radius-2xl: 0.75rem;   /* 12px */
-  --radius: 0.3125rem;
+  /* Radius — hard geometric, no softening */
+  --radius-sm: 0rem;   /* 0px */
+  --radius-md: 0rem;   /* 0px */
+  --radius-lg: 0rem;   /* 0px */
+  --radius-xl: 0rem;   /* 0px */
+  --radius-2xl: 0rem;  /* 0px */
+  --radius: 0rem;
 
   /* Typography */
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;

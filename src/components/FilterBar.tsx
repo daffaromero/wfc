@@ -43,13 +43,13 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
   }
 
   // Dark-canvas variants
-  const inactiveChip = "bg-background/8 border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors";
-  const inactiveSelect = "bg-background/8 border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors focus:outline-none cursor-pointer";
+  const inactiveChip = "border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors";
+  const inactiveSelect = "border border-background/15 text-background/50 hover:text-background hover:border-background/30 transition-colors focus:outline-none cursor-pointer";
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-0">
       {/* Search + reset row */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 pb-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-background/30 pointer-events-none" />
           <input
@@ -57,14 +57,14 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
             placeholder="Search cafes, areas, tags…"
             value={filters.query}
             onChange={(e) => set("query", e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-md bg-background/8 border border-background/15 text-background placeholder:text-background/30 text-sm focus:outline-none focus:border-background/40 transition-colors"
+            className="w-full pl-9 pr-4 py-2.5 bg-background/8 border border-background/15 text-background placeholder:text-background/30 text-sm focus:outline-none focus:border-background/40 transition-colors"
           />
         </div>
         <button
           onClick={() => onChange({ ...DEFAULT_FILTERS })}
           aria-hidden={!hasActiveFilters}
           className={cn(
-            "flex items-center gap-1.5 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+            "flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium transition-colors",
             inactiveChip,
             !hasActiveFilters && "invisible pointer-events-none"
           )}
@@ -74,21 +74,21 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         </button>
       </div>
 
-      {/* City tabs */}
-      <div className="flex gap-0.5 bg-background/8 p-0.5 rounded-md w-fit">
+      {/* City tabs — hard segments with a bottom rule */}
+      <div className="flex border-t border-b border-background/15">
         {(["all", "jakarta", "yogyakarta"] as const).map((c) => (
           <button
             key={c}
             onClick={() => set("city", c)}
             className={cn(
-              "px-4 py-1.5 rounded text-sm font-semibold transition-all",
+              "px-5 py-2.5 text-sm font-semibold transition-all border-r border-background/15 last:border-r-0",
               filters.city === c
                 ? c === "jakarta"
-                  ? "bg-[var(--color-wfc-blue)] text-white shadow-sm"
+                  ? "bg-[var(--color-wfc-blue)] text-white"
                   : c === "yogyakarta"
-                  ? "bg-[var(--color-wfc-green)] text-white shadow-sm"
-                  : "bg-background/20 text-background shadow-sm"
-                : "text-background/40 hover:text-background/70"
+                  ? "bg-[var(--color-wfc-green)] text-white"
+                  : "bg-background/20 text-background"
+                : "text-background/40 hover:text-background hover:bg-background/8"
             )}
           >
             {c === "all" ? "All" : c === "jakarta" ? "Jakarta" : "Yogyakarta"}
@@ -97,7 +97,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       </div>
 
       {/* Filter chips row */}
-      <div className="flex flex-wrap gap-2 items-center">
+      <div className="flex flex-wrap gap-1.5 items-center pt-3 pb-1">
         <SlidersHorizontal className="w-4 h-4 text-background/30 flex-shrink-0" />
 
         {/* WiFi */}
@@ -110,7 +110,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         <select
           value={filters.plugs}
           onChange={(e) => set("plugs", e.target.value as PlaceFilters["plugs"])}
-          className={cn("px-3 py-1.5 rounded text-sm border font-medium", filters.plugs !== "any"
+          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent", filters.plugs !== "any"
             ? "bg-[var(--color-wfc-green)] text-white border-transparent"
             : inactiveSelect)}
         >
@@ -124,7 +124,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         <select
           value={filters.noiseLevel}
           onChange={(e) => set("noiseLevel", e.target.value as PlaceFilters["noiseLevel"])}
-          className={cn("px-3 py-1.5 rounded text-sm border font-medium",
+          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent",
             filters.noiseLevel === "quiet" ? "bg-[var(--color-wfc-green)] text-white border-transparent"
             : filters.noiseLevel === "moderate" ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
             : filters.noiseLevel === "loud" ? "bg-[var(--color-wfc-red)] text-white border-transparent"
@@ -152,7 +152,7 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
         <select
           value={filters.maxPriceRange}
           onChange={(e) => set("maxPriceRange", Number(e.target.value) as PlaceFilters["maxPriceRange"])}
-          className={cn("px-3 py-1.5 rounded text-sm border font-medium",
+          className={cn("px-3 py-1.5 text-sm border font-medium bg-transparent",
             filters.maxPriceRange !== 4
               ? "bg-[var(--color-wfc-amber)] text-white border-transparent"
               : inactiveSelect)}
@@ -165,13 +165,16 @@ export function FilterBar({ filters, onChange, totalCount, filteredCount }: Filt
       </div>
 
       {/* Result count */}
-      <p className="text-sm text-background/40 font-medium">
+      <p className="text-xs text-background/40 font-medium pb-3">
         {filteredCount === totalCount ? (
           <span>{totalCount} places</span>
         ) : (
           <span><span className="text-background">{filteredCount}</span> of {totalCount} places</span>
         )}
       </p>
+
+      {/* Hard rule before grid */}
+      <div className="border-t border-background/15" />
     </div>
   );
 }
@@ -198,10 +201,10 @@ function FilterChip({
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1.5 rounded text-sm border font-medium transition-all",
+        "px-3 py-1.5 text-sm border font-medium transition-all",
         active
           ? activeClasses[activeColor]
-          : "bg-background/8 border-background/15 text-background/50 hover:text-background hover:border-background/30"
+          : "border-background/15 text-background/50 hover:text-background hover:border-background/30"
       )}
     >
       {children}

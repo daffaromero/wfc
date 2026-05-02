@@ -23,8 +23,8 @@ export function PlaceCard({ place }: PlaceCardProps) {
 
   return (
     <Link to={`/place/${place.id}`} className="group block">
-      {/* Dark-surface card: slightly lighter than the page bg */}
-      <div className="overflow-hidden border border-background/10 hover:border-background/25 hover:shadow-xl hover:shadow-black/40 transition-all duration-150 rounded-lg bg-background/6">
+      {/* Fills its grid cell directly — no border/radius, grid gap-px creates the lines */}
+      <div className="overflow-hidden hover:bg-background/10 transition-colors duration-150 bg-background/6 h-full">
         {/* Cover photo */}
         <div className="relative h-44 overflow-hidden bg-background/10">
           {coverPhoto ? (
@@ -42,7 +42,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
           {/* City pill */}
           <span
             className={cn(
-              "absolute top-3 left-3 text-white text-xs font-bold px-2 py-0.5 rounded",
+              "absolute top-0 left-0 text-white text-xs font-bold px-2.5 py-1.5",
               place.city === "jakarta"
                 ? "bg-[var(--color-wfc-blue)]"
                 : "bg-[var(--color-wfc-green)]"
@@ -51,7 +51,7 @@ export function PlaceCard({ place }: PlaceCardProps) {
             {cityLabel(place.city)}
           </span>
           {/* Price range */}
-          <span className="absolute top-3 right-3 bg-black/50 text-white text-xs font-bold px-2 py-0.5 rounded">
+          <span className="absolute top-0 right-0 bg-black/60 text-white text-xs font-bold px-2.5 py-1.5">
             {PRICE_SYMBOLS[wfc.menu.priceRange]}
           </span>
         </div>
@@ -79,29 +79,29 @@ export function PlaceCard({ place }: PlaceCardProps) {
           )}
 
           {/* Key WFC badges */}
-          <div className="flex flex-wrap gap-1.5 mt-auto">
+          <div className="flex flex-wrap gap-1 mt-auto">
             {wfc.wifi.available ? (
-              <Badge className={cn("rounded", wifiSpeedVariant(wfc.wifi.speed))}>
+              <Badge className={cn("rounded-none text-xs", wifiSpeedVariant(wfc.wifi.speed))}>
                 <Wifi className="w-3 h-3" />
                 {wifiSpeedLabel(wfc.wifi.speed)}
               </Badge>
             ) : (
-              <Badge className="rounded bg-background/10 text-background/40 border-0">
+              <Badge className="rounded-none text-xs bg-background/10 text-background/40 border-0">
                 <WifiOff className="w-3 h-3" />
                 No WiFi
               </Badge>
             )}
             {wfc.plugs !== "none" && (
-              <Badge className={cn("rounded", plugsVariant(wfc.plugs))}>
+              <Badge className={cn("rounded-none text-xs", plugsVariant(wfc.plugs))}>
                 <Plug className="w-3 h-3" />
                 {wfc.plugs === "ample" ? "Ample plugs" : "Some plugs"}
               </Badge>
             )}
-            <Badge className={cn("rounded", noiseLevelVariant(wfc.noiseLevel))}>
+            <Badge className={cn("rounded-none text-xs", noiseLevelVariant(wfc.noiseLevel))}>
               {wfc.noiseLevel.charAt(0).toUpperCase() + wfc.noiseLevel.slice(1)}
             </Badge>
             {wfc.prayerRoom && (
-              <Badge className="rounded bg-[var(--color-wfc-teal)] text-white border-0">
+              <Badge className="rounded-none text-xs bg-[var(--color-wfc-teal)] text-white border-0">
                 Prayer room
               </Badge>
             )}
