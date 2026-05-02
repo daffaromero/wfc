@@ -18,6 +18,9 @@ curated.db-shm
 curated.db-wal
 drizzle/
 
+# Personal place data — not for public repo
+src/data/places.ts
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
