@@ -11,6 +11,7 @@ export const places = sqliteTable("places", {
   lat:           real("lat").notNull().default(0),
   lng:           real("lng").notNull().default(0),
   googlePlaceId: text("google_place_id"),
+  mapsPath:      text("maps_path"),               // Google Maps place path e.g. "/g/11c3k6fp7p" — stable sync key
   photos:        text("photos").notNull().default("[]"),        // JSON string[]
   googleRating:  real("google_rating"),
   totalRatings:  integer("total_ratings"),
