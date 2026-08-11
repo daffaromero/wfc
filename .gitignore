@@ -21,6 +21,9 @@ drizzle/
 # Personal place data — not for public repo
 src/data/places.ts
 
+# Discovery run output
+reports/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -19,7 +19,7 @@
 
 import { db } from "../db/client";
 import { places } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { findExistingPlace } from "../../scripts/lib/place-dedup";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -145,7 +145,7 @@ export async function fetchMapsEntries(): Promise<MapsEntry[]> {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function slugify(name: string): string {
+export function slugify(name: string): string {
   return name
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")   // strip diacritics
@@ -195,7 +195,7 @@ function inferPrayerRoom(note: string): boolean {
  * counter) only when that base is already taken by a *different* place.
  * Mirrors the hand-curated style (e.g. "kopikina-tebet").
  */
-function makeReadableId(name: string, area: string, taken: Set<string>): string {
+export function makeReadableId(name: string, area: string, taken: Set<string>): string {
   const base = slugify(name);
   if (!taken.has(base)) return base;
 
@@ -226,9 +226,23 @@ export async function syncFromMaps(opts: SyncOptions = {}): Promise<SyncSummary>
     addedNames: [],
   };
 
-  // Seed the taken-id set with everything already in the DB so generated ids
-  // never collide with existing rows.
-  const taken = new Set(db.select({ id: places.id }).from(places).all().map((r) => r.id));
+  // Existing rows, used both to keep generated ids unique and to recognise a
+  // place we already have. Rows added by discover-cafes.ts carry a Places API
+  // id but no maps path, so the path check alone would re-add them — hence the
+  // name+proximity fallback in findExistingPlace.
+  const existingRows = db
+    .select({
+      id: places.id,
+      name: places.name,
+      lat: places.lat,
+      lng: places.lng,
+      googlePlaceId: places.googlePlaceId,
+      mapsPath: places.mapsPath,
+    })
+    .from(places)
+    .all();
+
+  const taken = new Set(existingRows.map((r) => r.id));
   // Guard against the same place appearing twice within this run (e.g. present
   // in more than one list, or before the insert has landed in dry-run).
   const seen = new Set<string>();
@@ -245,11 +259,12 @@ export async function syncFromMaps(opts: SyncOptions = {}): Promise<SyncSummary>
     seen.add(dedupKey);
 
     if (!reset) {
-      const existing = db
-        .select({ id: places.id })
-        .from(places)
-        .where(eq(places.mapsPath, dedupKey))
-        .get();
+      const existing = findExistingPlace(existingRows, {
+        name: entry.name,
+        lat: entry.lat,
+        lng: entry.lng,
+        mapsPath: dedupKey,
+      });
       if (existing) {
         summary.skipped++;
         continue;
@@ -300,6 +315,17 @@ export async function syncFromMaps(opts: SyncOptions = {}): Promise<SyncSummary>
     if (!dryRun) {
       db.insert(places).values(row).run();
     }
+
+    // Keep the in-memory set current so two near-identical list entries in the
+    // same run don't both land.
+    existingRows.push({
+      id,
+      name: entry.name,
+      lat: entry.lat,
+      lng: entry.lng,
+      googlePlaceId: null,
+      mapsPath: dedupKey,
+    });
 
     summary.added++;
     summary.addedNames.push(`${entry.name} (${entry.area}, ${city})`);
